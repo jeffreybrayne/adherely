@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/Home.vue'
 import RegisterView from '../views/Register.vue'
 import LoginView from '../views/Login.vue'
-import LogoutView from '../views/Logout.vue'
 import firebase from '@/services/firebase'
 import { getAuth } from 'firebase/auth'
 const auth = getAuth()
@@ -24,11 +23,6 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView
-    },
-    {
-      path: '/logout',
-      name: 'logout',
-      component: LogoutView
     },
     {
       path: '/secret',

@@ -1,35 +1,49 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import firebase from '@/services/firebase'
-import { getAuth, signOut } from 'firebase/auth'
-const auth = getAuth()
-const logout = () => {
-  signOut(auth).then(() => {
-    console.log('logged out')
-    this.$router.push('/')
-  })
-}
-</script>
-
 <template>
-  <figure>
-    <img alt="Vue logo" class="logo" src="@/assets/adherely.svg" width="125" height="125" />
-  </figure>
   <header>
-
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/secret">Secret</RouterLink>
-        <RouterLink to="/login">Login</RouterLink>
-        <RouterLink to="/register">Register</RouterLink>
-        <a @click="logout">Logout</a>
-      </nav>
-    </div>
+    <figure>
+      <img alt="Vue logo" class="logo" src="@/assets/adherely.svg" width="125" height="125" />
+    </figure>
+    <nav>
+      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/secret">Secret</RouterLink>
+      <RouterLink v-if="!authed" to="/login">Login</RouterLink>
+      <a v-if="authed" @click="logout">Logout</a>
+      <RouterLink to="/register">Register</RouterLink>
+    </nav>
   </header>
-
   <RouterView />
 </template>
+
+<script>
+import { ref } from 'vue'
+import { RouterLink, RouterView, useRouter } from 'vue-router'
+import firebase from '@/services/firebase'
+import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth'
+
+export default {
+  setup() {
+    const authed = ref(null)
+    const auth = getAuth()
+    const router = useRouter()
+    const logout = () => {
+      signOut(auth).then(() => {
+        alert('You\'ve been logged out')
+        router.push('/')
+      })
+    }
+
+    return {
+      authed, auth, logout
+    }
+  },
+
+  mounted() {
+    onAuthStateChanged(this.auth, (user) => {
+      this.authed = user ? user.uid : false
+    })
+  }
+}
+</script>
 
 <style>
 @import '@/assets/base.css';
@@ -43,6 +57,7 @@ const logout = () => {
 
 figure {
   grid-column: 1;
+  max-height: 4rem;
 }
 
 header {
@@ -93,42 +108,5 @@ nav a {
 
 nav a:first-of-type {
   border: 0;
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr;
-    padding: 0 2rem;
-  }
-
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 5);
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .logo {
-    margin: 1rem 0 0 0;
-  }
-
-  nav {
-    text-align: left;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
 }
 </style>

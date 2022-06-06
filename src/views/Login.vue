@@ -31,6 +31,7 @@
 
 <style scoped>
 article {
+  margin-top: 3rem;
   min-height: 10rem;
   min-width: 20rem;
 }
