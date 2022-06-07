@@ -1,6 +1,8 @@
 <template>
   <article>
     <h1>Register</h1>
+    <p>Once you submit your registration, you will receive a confirmation email shortly thereafter.
+      Confirm your address before logging in.</p>
     <p><input type="text" placeholder="Email" v-model="email" /></p>
     <p><input type="password" placeholder="Password" v-model="password" /></p>
     <p><button @click="register">Submit</button></p>
@@ -19,7 +21,7 @@
   const register = () => {
     createUserWithEmailAndPassword(auth, email.value, password.value)
       .then((data) => {
-        alert('Successfully registered!');
+        alert('Successfully registered! Check your email to verify.');
         sendEmailVerification(auth.currentUser)
         router.push('/login')
       })

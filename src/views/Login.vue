@@ -1,6 +1,7 @@
 <template>
   <article>
     <h1>Login</h1>
+    <p>You must login to see the company secrets</p>
     <p><input type="text" placeholder="Email" v-model="email" /></p>
     <p><input type="password" placeholder="Password" v-model="password" /></p>
     <p><button @click="login">Login</button></p>
@@ -19,7 +20,7 @@
   const login = () => {
     signInWithEmailAndPassword(auth, email.value, password.value)
       .then((data) => {
-        console.log('Successfully logged in!');
+        alert('Successfully logged in!');
         router.push('/secret')
       })
       .catch(error => {
